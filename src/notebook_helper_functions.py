@@ -42,7 +42,6 @@ def impute(data_df: pd.DataFrame, missing_data_features: list) -> pd.DataFrame:
         indicator_features.append(f'{feature}_indicator')
 
     feature_names.extend(indicator_features)
-    print(f'New feature names: {feature_names}')
 
     imputed_training_features=pd.DataFrame(data=imputed_training_features, columns=feature_names)
 
