@@ -20,14 +20,14 @@ Once you have your application running in a codespace with no errors, it is time
 
 This will take you to the new webservice's dashboard. Then, from the settings tab set the following values:
 
-- Name: whatever you want
-- Project: don't need to add to a project for a minimal deployment
-- Language: Python 3
-- Branch: main
-- Region: Ohio (US east) - or whatever is closest to you
-- Root directory: src
-- Build Command: pip install -r ../requirements.txt
-- Start Command: streamlit run app.py
+- **Name**: whatever you want
+- **Project**: don't need to add to a project for a minimal deployment
+- **Language**: Python 3
+- **Branch**: main
+- **Region**: Ohio (US east) - or whatever is closest to you
+- **Root directory**: src
+- **Build command**: pip install -r ../requirements.txt
+- **Start command**: streamlit run app.py
 
 Only real gotcha here is the root directory. Setting it to src means that Render will run all commands from there. This is what we want in the case of our application. But, since the requirements file is in the project home (i.e. one directory above src) we need to make sure we set the path right while pip installing.
 
