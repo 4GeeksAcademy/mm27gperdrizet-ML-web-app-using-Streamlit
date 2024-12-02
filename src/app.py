@@ -1,6 +1,7 @@
+'''Simple Streamlit web app.'''
 import pickle
 import pandas as pd
-from flask import Flask, request, render_template
+import streamlit as st
 
 # Load the model
 model_file='../models/model.pkl'
@@ -8,24 +9,41 @@ model_file='../models/model.pkl'
 with open(model_file, 'rb') as input_file:
     model=pickle.load(input_file)
 
-# Define the flask application
-app=Flask(__name__)
+# Dictionary to translate numerical predictions into
+# human readable strings
+class_dict={
+    '0': 'Not diabetic',
+    '1': 'Diabetic'
+}
 
-@app.route('/', methods = ['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        
-        # Get the data from the form - take a look at the tutorial
-        # for a hint on how to do this. Also, if you are using the model
-        # supplied above, you need to send it four features: Glucose,
-        # Insulin, BMI and Age
+# Page title
+st.title('Diabetes prediction')
 
-        # Next format the data for input into the model. For the model
-        # Supplied above, it should be a Pandas dataframe with four
-        # columns, one for each feature and one row.
+# Sliders for input data
+glucose=st.slider('Glucose', min_value=0.0, max_value=200.0, step=1.0)
+insulin=st.slider('Insulin', min_value=0.0, max_value=300.0, step=1.0)
+bmi=st.slider('BMI', min_value=0.0, max_value=100.0, step=1.0)
+age=st.slider('Age', min_value=1, max_value=90, step=1)
 
-        # Then do the prediction and covert the class number that the
-        # model returns to a human readable string, like 'diabetic' etc.
+# When the user clicks 'Predict'
+if st.button('Predict'):
 
-    # Return the result to flask
-    return render_template('index.html', prediction=predicted_outcome)
+    # Format the data for inference
+    data=pd.DataFrame.from_dict({
+        'Glucose': [glucose],
+        'Insulin': [insulin],
+        'BMI': [bmi],
+        'Age': [age]
+    })
+
+    # Print out the input features to the terminal for troubleshooting
+    print(data.head())
+
+    # Do the prediction
+    prediction=str(model.predict(data)[0])
+
+    # Convert the predicted value to a human readable string
+    pred_class=class_dict[prediction]
+
+    # Display the prediction to the user
+    st.write('Prediction:', pred_class)
